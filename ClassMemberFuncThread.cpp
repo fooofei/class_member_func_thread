@@ -21,8 +21,8 @@ struct work_t
 template <typename T>
 union proc_u
 {
-	unsigned int (WINAPI * ThreadProc)(void*);
-	unsigned int  (WINAPI T::*MemberProc)();
+    unsigned int (WINAPI * ThreadProc)(void*);
+    unsigned int  (WINAPI T::*MemberProc)();
 };
 
 
@@ -32,11 +32,11 @@ int main(int argc, char * argv[])
     workobj.num_ = 5;
 
     proc_u<work_t> proc;
-	proc.MemberProc = &work_t::work;
+    proc.MemberProc = &work_t::work;
 
-	HANDLE h = (HANDLE)(_beginthreadex(NULL,0,proc.ThreadProc,&workobj,0,NULL));
-	WaitForSingleObject(h,INFINITE);
-	CloseHandle(h);
+    HANDLE h = (HANDLE)(_beginthreadex(NULL,0,proc.ThreadProc,&workobj,0,NULL));
+    WaitForSingleObject(h,INFINITE);
+    CloseHandle(h);
 
     return 0;
 }
