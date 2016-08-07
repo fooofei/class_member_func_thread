@@ -2,18 +2,6 @@
 #include <stdio.h>
 #include <process.h>
 #include <windows.h>
-class CWork
-{
-	size_t _num;
-public:
-	CWork(size_t i):_num(i){}
-
-	unsigned int WINAPI  work()
-	{
-		printf("number = %d\n",_num);
-		return 0;
-	}
-};
 
 
 struct work_t
