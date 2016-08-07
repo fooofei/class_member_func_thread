@@ -1,39 +1,55 @@
 
-#include "stdafx.h"
+#include <stdio.h>
 #include <process.h>
 #include <windows.h>
 class CWork
 {
-private:
 	size_t _num;
 public:
 	CWork(size_t i):_num(i){}
-public:
+
 	unsigned int WINAPI  work()
 	{
 		printf("number = %d\n",_num);
 		return 0;
 	}
 };
+
+
+struct work_t
+{
+    unsigned int  num_;
+
+    work_t():num_(0){}
+
+    unsigned int WINAPI work()
+    {
+        printf("number = %d\n",num_);
+        return num_;
+    }
+};
+
+
 template <typename T>
-union u_Proc
+union proc_u
 {
 	unsigned int (WINAPI * ThreadProc)(void*);
 	unsigned int  (WINAPI T::*MemberProc)();
 };
 
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char * argv[])
 {
-	CWork obj(2);
-	u_Proc<CWork> proc;
-	proc.MemberProc = &CWork::work;
+    work_t workobj;
+    workobj.num_ = 5;
 
-	HANDLE h = (HANDLE)(_beginthreadex(NULL,0,proc.ThreadProc,&obj,0,NULL));
+    proc_u<work_t> proc;
+	proc.MemberProc = &work_t::work;
 
+	HANDLE h = (HANDLE)(_beginthreadex(NULL,0,proc.ThreadProc,&workobj,0,NULL));
 	WaitForSingleObject(h,INFINITE);
-
 	CloseHandle(h);
-	return 0;
+
+    return 0;
 }
 
